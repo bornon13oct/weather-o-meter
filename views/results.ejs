@@ -1,0 +1,94 @@
+<% include partials/header %>
+
+<div class="main">
+	<h1 style="font-weight: 400;">Weather-O-Meter</h1>
+	<div class="main-info">
+		<div class="weather-top">	
+			<div class="weather-grids">
+				<h3 class="fri"><%= day %> </h3>
+				<h3>Weather</h3>
+			</div>
+			<div class="weather-grids weather-mdl">
+				<canvas class=<%= hourly.data[0].icon %> width="100" height="100"></canvas>
+			</div>
+			<div class="weather-grids">
+				<h4><%= hourly.data[0].summary  %></h4>
+				<h2><%= Math.round((((JSON.stringify(hourly.data[0].temperature))-32)*5)/9) %>°C</h2>
+				<h4>Humidity - <%= Math.round(JSON.stringify(hourly.data[0].humidity)*100) %>%</h4>
+			</div>
+			<div class="clear"> </div>
+		</div>
+		<div class="weather-bottom">	
+			<ul>
+			  <% for(var i=2;i<24;i+=2){ %>
+        <% hours+=2 %>
+        <% if(hours>=12){
+            hours-=12;
+            if(amorpm=="am") 
+                amorpm="PM";
+            else
+                amorpm="AM";
+        } %>
+        <%  if(hours==0){ 
+          hours=12;
+          amorpm="AM";
+         } %>
+					<% if(i%4!=0){ %>
+  					<li class="bg"><h4><span style="font-size:20px;"><%= hours %></span><span style="font-size:15px;"><%= amorpm %></span></h4>
+  						<figure class="icons">
+  							<canvas class=<%= hourly.data[i].icon %> width="40" height="40"></canvas>
+  						</figure>
+  						<h5><%= Math.round((((JSON.stringify(hourly.data[i].temperature))-32)*5)/9) %>°C</h5>
+  						<h6 style="font-size:12px;">Humidity-<%= Math.round(JSON.stringify(hourly.data[i].humidity)*100) %>%</h6>
+  					</li>
+					<% } else { %>
+					   <li><h4><span style="font-size:20px;"><%= hours %></span><span style="font-size:15px;"><%= amorpm %></span></h4>
+						<figure class="icons">
+							<canvas class=<%= hourly.data[i].icon %> width="40" height="40"></canvas>
+						</figure>
+						<h5><%= Math.round((((JSON.stringify(hourly.data[i].temperature))-32)*5)/9) %>°C</h5>
+						<h6 style="font-size:12px;">Humidity-<%= Math.round(JSON.stringify(hourly.data[i].humidity)*100) %>%</h6>
+					</li>
+					<% } %>
+				<% } %>
+			</ul>
+			<div class="clear"> </div>
+		</div>
+		<script>
+			 var icons = new Skycons({"color": "#FFD700"}),
+				  list  = [
+					"clear-day"
+				  ],
+				  i;
+
+			  for(i = list.length; i--; ) {
+            var weatherType = list[i],
+                elements = document.getElementsByClassName( weatherType );
+            for (e = elements.length; e--;){
+                icons.set( elements[e], weatherType );
+            }
+        }
+			  icons.play();
+		</script>
+		<script>
+			 var icons = new Skycons({"color": "#f5f5f5"}),
+				  list  = [
+					"clear-night", "partly-cloudy-day",
+					"partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+					"fog"
+				  ],
+				  i;
+
+			 for(i = list.length; i--; ) {
+            var weatherType = list[i],
+                elements = document.getElementsByClassName( weatherType );
+            for (e = elements.length; e--;){
+                icons.set( elements[e], weatherType );
+            }
+        }
+			  icons.play();
+		</script>
+	</div>
+</div>
+
+<% include partials/footer %>
